@@ -78,75 +78,7 @@
 	                		</table>
 	                	</cfform>
 	                	
-	                	<h2>Degree Categories</h2>
 	                	
-	                	<!---------------------Degree category headings------------------------------------>
-	                	
-	                	<cfif qEditGetAllCategories.RecordCount>
-	                		<div id="h4-box">
-	                			<table>
-	                				<tr>
-	                					<th>Category</th>
-	                					<th></th>
-	                				</tr>
-	                				<cfif messageBean.hasErrors() && isDefined("form.delCategory")>
-		                				<tr>
-											<td colspan="2">
-												<div id="form-errors">
-													<ul>
-														<cfloop array="#messageBean.getErrors()#" index="error">
-															<cfoutput><li>#error.message#</li></cfoutput>
-														</cfloop>
-													</ul>
-												</div>											
-											</td>
-										</tr>
-		                			</cfif>
-	                				<tr>
-	                					<cfloop query="qEditGetAllCategories">
-		                					<cfform>
-		                						<tr>
-		                							<cfinput type="hidden" name="categoryId" value="#qEditGetAllCategories.id#">
-		                							<td><cfoutput>#qEditGetAllCategories.category#</cfoutput></td>
-		                							<td><cfinput type="submit" name="delCategory" value="Remove"></td>
-		                						</tr>
-		                					</cfform>
-		                				</cfloop>
-	                				</tr>
-	                			</table>
-	                		</div>
-	                	</cfif>
-	                	
-	                	<div id="h4-box">
-	                		<table>
-	                			<tr>
-	                				<td colspan="2"><h4>Add New Category</h4></td>
-	                			</tr>
-	                			<cfif messageBean.hasErrors() && isDefined("form.addDegreeCategory")>
-	                				<tr>
-										<td colspan="2">
-											<div id="form-errors">
-												<ul>
-													<cfloop array="#messageBean.getErrors()#" index="error">
-														<cfoutput><li>#error.message#</li></cfoutput>
-													</cfloop>
-												</ul>
-											</div>											
-										</td>
-									</tr>
-	                			</cfif>
-	                			<cfform>
-									<tr>
-										<td width="125px">Category:</td>
-										<td><cfinput type="text" id="degreeCategory" name="degreeCategory"></td>
-									</tr>
-									<tr>
-										<td></td>
-										<td><cfinput type="submit" name="addDegreeCategory" value="Add category"></td>
-									</tr>
-								</cfform>
-	                		</table>
-	                	</div>
 	                		
 	                	<h2>Admission Requirements</h2>
 	                	
@@ -157,7 +89,7 @@
 							<div id="h4-box">
 								<table>																
 									<tr>
-										<th>CC Course</th>
+										<th>EvCC Course</th>
 										<th>Category</th>
 										<th>Equivalent Course</th>
 										<th></th>
@@ -166,8 +98,8 @@
 										<cfform>
 											<tr>
 												<cfinput type="hidden" name="admCoursesId" value="#qEditGetAdmissionCourses.id#">
-												<td width="20%"><cfoutput>#qEditGetAdmissionCourses.course_number#</cfoutput></td>
-												<td width="35%"><cfoutput>#qEditGetAdmissionCourses.category#</cfoutput></td>
+												<td width="40%"><cfoutput>#qEditGetAdmissionCourses.course_number#</cfoutput></td>
+												<td width="15%"><cfoutput>#qEditGetAdmissionCourses.category#</cfoutput></td>
 												<td width="35%"><cfoutput>#qEditGetAdmissionCourses.foreign_course_number#</cfoutput></td>
 												<td width="10%"><cfinput type="submit" name="delAdmCourseReq" value="Remove"></td>
 											</tr>
@@ -199,7 +131,7 @@
 								
 								<cfform>
 									<tr>
-										<td width="125px">CC course:</td>
+										<td width="125px">EvCC course:</td>
 										<td><cfinput type="text" id="localAdmCourse" name="localAdmCourse"></td>
 									</tr>
 									<tr>
@@ -243,26 +175,26 @@
 						</div>
 						
 						
-						<!---------------------Admission requirements by degree category---------------------------->		
+						<!---------------------Admission requirements by discipline ---------------------------->		
 						
-	                	<h3>By Degree Category</h3>
+	                	<h3>By Academic Discipline</h3>
 	                	
-						<cfif qEditGetAdmissionCategories.RecordCount>	                	
+						<cfif qEditGetAdmissionCodekeys.RecordCount>	                	
 		                	<div id="h4-box">
 								<table>										
 									<tr>
-										<th width="47%">CC category</th>
+										<th width="47%">EvCC codekey</th>
 										<th width="47%">Credit required</th>
 										<th></th>
 										<th></th>
 									</tr>
-									<cfloop query="qEditGetAdmissionCategories">
+									<cfloop query="qEditGetAdmissionCodekeys">
 										<cfform>
 											<tr>
-											<cfinput type="hidden" name="admCategoryId" value="#qEditGetAdmissionCategories.degree_categories_id#">
-											<td width="55%"><cfoutput>#qEditGetAdmissionCategories.category#</cfoutput></td>
-											<td width="35%"><cfoutput>#qEditGetAdmissionCategories.credit#</cfoutput></td>
-											<td width="10%"><cfinput type="submit" name="delAdmCategoryReq" value="Remove"></td>
+											<cfinput type="hidden" name="admCodekeysId" value="#qEditGetAdmissionCodekeys.id#">
+											<td width="55%"><cfoutput>#qEditGetAdmissionCodekeys.description#</cfoutput></td>
+											<td width="35%"><cfoutput>#qEditGetAdmissionCodekeys.credit#</cfoutput></td>
+											<td width="10%"><cfinput type="submit" name="delAdmCodekeyReq" value="Remove"></td>
 											</tr>
 										</cfform>
 									</cfloop>
@@ -273,9 +205,9 @@
 						<div id="h4-box">
 							<table>
 								<tr>
-									<td colspan="2"><h4>Add New Category</h4></td>
+									<td colspan="2"><h4>Add New Discipline</h4></td>
 								</tr>
-			                	<cfif messageBean.hasErrors() && isDefined("form.addAdmCategoryReq")>
+			                	<cfif messageBean.hasErrors() && isDefined("form.addAdmCodekeyReq")>
 									<tr>
 										<td colspan="3">
 											<div id="form-errors">
@@ -291,22 +223,22 @@
 	                	
 								<cfform>
 								<tr>
-									<td width="125px">CC category:</td>
+									<td width="125px">EvCC codekey:</td>
 									<td>
-										<cfselect name="localAdmCategory" query="qEditGetAllCategories" display="category" value="id" queryPosition="below" >
-											<option value="0">Select a category</option>
+										<cfselect name="localAdmCodekey" query="qEditGetAllCodekeys" display="description" value="id" queryPosition="below" >
+											<option value="0">Select a discipline</option>
 										</cfselect>
 									</td>
 								</tr>
 								<tr>
 									<td>Credits required:</td>
 									<td>
-										<cfinput type="text" id="categoryAdmCredits" name="categoryAdmCredits">
+										<cfinput type="text" id="codekeyAdmCredits" name="codekeyAdmCredits">
 									</td>
 								</tr>
 								<tr>
 									<td></td>
-									<td><cfinput type="submit" name="addAdmCategoryReq" value="Add category"></td>
+									<td><cfinput type="submit" name="addAdmCodekeyReq" value="Add discipline"></td>
 								</tr>
 								</cfform>
 							</table>
@@ -321,11 +253,11 @@
 								<cfform>
 	                				<tr>
 	                					<td width="125px">Notes:</td>
-                						<td><textarea name="admCategoryReqNote" rows="5" cols="50"><cfoutput>#qEditGetDegreeNotes.admission_categories_note#</cfoutput></textarea></td>
+                						<td><textarea name="admCodekeyReqNote" rows="5" cols="50"><cfoutput>#qEditGetDegreeNotes.admission_codekeys_note#</cfoutput></textarea></td>
 	                				</tr>
 	                				<tr>
 	                					<td></td>
-                					<td><cfinput type="submit" name="updateAdmCategoryReqNoteButton" value="Update notes"></td>
+                					<td><cfinput type="submit" name="updateAdmCodekeyReqNoteButton" value="Update notes"></td>
 	                				</tr>
 	                			</cfform>
 							</table>
@@ -343,7 +275,7 @@
 							<div id="h4-box">
 								<table>																
 									<tr>
-										<th>CC Course</th>
+										<th>EvCC Course</th>
 										<th>Category</th>
 										<th>Equivalent Course</th>
 										<th></th>
@@ -352,8 +284,8 @@
 										<cfform>
 											<tr>
 												<cfinput type="hidden" name="grdCoursesId" value="#qEditGetGraduationCourses.id#">
-												<td width="20%"><cfoutput>#qEditGetGraduationCourses.course_number#</cfoutput></td>
-												<td width="35%"><cfoutput>#qEditGetGraduationCourses.category#</cfoutput></td>
+												<td width="40%"><cfoutput>#qEditGetGraduationCourses.course_number#</cfoutput></td>
+												<td width="15%"><cfoutput>#qEditGetGraduationCourses.category#</cfoutput></td>
 												<td width="35%"><cfoutput>#qEditGetGraduationCourses.foreign_course_number#</cfoutput></td>
 												<td width="10%"><cfinput type="submit" name="delGrdCourseReq" value="Remove"></td>
 											</tr>
@@ -386,7 +318,7 @@
 								
 								<cfform>
 									<tr>
-										<td width="125px">CC course:</td>
+										<td width="125px">EvCC course:</td>
 										<td><cfinput type="text" id="localGrdCourse" name="localGrdCourse"></td>
 									</tr>
 									<tr>
@@ -429,39 +361,41 @@
 	                	
 	                	
 	                	           	
-	                	<!---------------------Grad requirements by degree category---------------------------->		                	
-	                	<h3>By Degree Category</h3>
-	                							
-						<cfif qEditGetGraduationCategories.RecordCount>	                	
-		                	<div id="h4-box">
+	                	<!--------------------- Grad requirements by discipline---------------------------->		                	
+	                	<h3>By Academic Discipline</h3>
+	                	
+	                	
+	                	<cfif qEditGetGraduationCodekeys.RecordCount>	   	
+							<div id="h4-box">
 								<table>										
 									<tr>
-										<th width="47%">CC category</th>
+										<th width="47%">EvCC codekey</th>
 										<th width="47%">Credit required</th>
 										<th></th>
 										<th></th>
 									</tr>
-									<cfloop query="qEditGetGraduationCategories">
-										<cfform>
-											<tr>
-											<cfinput type="hidden" name="grdCategoryId" value="#qEditGetGraduationCategories.degree_categories_id#">
-											<td width="55%"><cfoutput>#qEditGetGraduationCategories.category#</cfoutput></td>
-											<td width="35%"><cfoutput>#qEditGetGraduationCategories.credit#</cfoutput></td>
-											<td width="10%"><cfinput type="submit" name="delGrdCategoryReq" value="Remove"></td>
-											</tr>
-										</cfform>
-									</cfloop>
-								</table>		                			                		
-		                	</div>
-						</cfif>	
+								<cfloop query="qEditGetGraduationCodekeys">
+									<cfform>
+										<tr>
+											<cfinput type="hidden" name="grdCodekeysId" value="#qEditGetGraduationCodekeys.id#">
+											<td width="55%"><cfoutput>#qEditGetGraduationCodekeys.description#</cfoutput></td>
+											<td width="35%"><cfoutput>#qEditGetGraduationCodekeys.credit#</cfoutput></td>
+											<td width="10%"><cfinput type="submit" name="delGrdCodekeyReq" value="Remove"></td>
+										</tr>
+									</cfform>
+								</cfloop>
+								</table>							
+							</div>
+						</cfif>
 	                	
 	                	<div id="h4-box">
 							<table>
 								<tr>
-									<td colspan="2"><h4>Add New Category</h4></td>
+									<td colspan="2"><h4>Add New Discipline</h4></td>
 								</tr>								
 
-								<cfif messageBean.hasErrors() && isDefined("form.addGrdCategoryReq")>
+							
+								<cfif messageBean.hasErrors() && isDefined("form.addGrdCodekeyReq")>
 								<tr>
 									<td colspan="3">
 										<div id="form-errors">
@@ -475,46 +409,45 @@
 								</tr>
 								</cfif>
 								
+														
+
 								<cfform>
 								<tr>
-									<td width="125px">CC category:</td>
-									<td>
-										<cfselect name="localGrdCategory" query="qEditGetAllCategories" display="category" value="id" queryPosition="below" >
-											<option value="0">Select a category</option>
+									<td width="125px">EvCC codekey:</td>
+									<td><cfselect name="localGrdCodekey" query="qEditGetAllCodekeys" display="description" value="id" queryPosition="below" >
+											<option value="0">Select a discipline</option>
 										</cfselect>
 									</td>
 								</tr>
 								<tr>
 									<td>Credits required:</td>
-									<td>
-										<cfinput type="text" id="categoryGrdCredits" name="categoryGrdCredits">
-									</td>
+										<td><cfinput type="text" id="codekeyGrdCredits" name="codekeyGrdCredits"></td>
 								</tr>
 								<tr>
 									<td></td>
-									<td><cfinput type="submit" name="addGrdCategoryReq" value="Add category"></td>
+									<td><cfinput type="submit" name="addGrdCodekeyReq" value="Add discipline"></td>
 								</tr>
 								</cfform>
 							</table>
 						</div>
 	                	
 	                	<div id="h4-box">
-							<table>
-								<tr>
-									<td colspan="2"><h4>Add Notes</h4></td>									
-								</tr>	
-								<cfform>
-	                				<tr>
-	                					<td width="125px">Notes:</td>
-                						<td><textarea name="grdCategoryReqNote" rows="5" cols="50"><cfoutput>#qEditGetDegreeNotes.graduation_categories_note#</cfoutput></textarea></td>
-	                				</tr>
-	                				<tr>
-	                					<td></td>
-                					<td><cfinput type="submit" name="updateGrdCategoryReqNoteButton" value="Update notes"></td>
-	                				</tr>
-	                			</cfform>
-							</table>
-						</div>
+	                	<table>
+							<tr>
+								<td colspan="2"><h4>Add Notes</h4></td>									
+							</tr>
+							<cfform>
+                				<tr>
+                					<td width="125px">Notes:</td>
+                					<td><textarea name="grdCodekeyReqNote" rows="5" cols="50"><cfoutput>#qEditGetDegreeNotes.graduation_codekeys_note#</cfoutput></textarea></td>
+                				</tr>
+                				<tr>
+                					<td></td>
+                					<td><cfinput type="submit" name="updateGrdCodekeyReqNoteButton" value="Update notes"></td>
+                				</tr>
+                			</cfform>
+                		</table>
+	                	</div>
 
 	                	<!---------------------General notes---------------------------->	
 	                		                	
