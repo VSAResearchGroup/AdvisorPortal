@@ -87,7 +87,8 @@
 							<div id="h4-box">
 								<table>										
 									<tr>
-										<th width="35%">CC Course</th>
+										<th width="35%">EvCC Course</th>
+										<th width="25%">Category</th>
 										<th width="35%">Equivalent Course</th>
 										<th></th>
 									</tr>
@@ -96,6 +97,7 @@
 											<tr>
 												<cfinput type="hidden" name="coursesId" value="#qEditGetAdmissionCourses.id#">
 												<td><cfoutput>#qEditGetAdmissionCourses.course_number#</cfoutput></td>
+												<td><cfoutput>#qEditGetAdmissionCourses.category#</cfoutput></td>
 												<td><cfoutput>#qEditGetAdmissionCourses.foreign_course_number#</cfoutput></td>
 												<td><cfinput type="submit" name="delCourseReq" value="Remove"></td>
 											</tr>
@@ -125,8 +127,16 @@
 
 								<cfform>
 								<tr>
-									<td width="125px">CC course:</td>
+									<td width="125px">EvCC course:</td>
 									<td><cfinput type="text" id="localCourse" name="localCourse"></td>
+								</tr>
+								<tr>
+									<td>Category: </td>
+									<td>
+										<cfselect name="localCourseCategory" query="qEditGetSelectCategories" display="category" value="id" queryPosition="below" >
+											<option value="0">Select a category</option>
+										</cfselect>
+									</td>
 								</tr>
 								<tr>
 									<td>Equivalent course: </td>
@@ -166,7 +176,7 @@
 							<div id="h4-box">
 								<table>										
 									<tr>
-										<th width="47%">CC Department</th>
+										<th width="47%">EvCC Department</th>
 										<th width="47%">Credit Required</th>
 										<th></th>
 									</tr>
@@ -255,7 +265,7 @@
 							<div id="h4-box">
 								<table>										
 									<tr>
-										<th width="47%">CC codekey</th>
+										<th width="47%">EvCC codekey</th>
 										<th width="47%">Credit required</th>
 										<th></th>
 										<th></th>
@@ -296,7 +306,7 @@
 
 								<cfform>
 								<tr>
-									<td width="125px">CC codekey:</td>
+									<td width="125px">EvCC codekey:</td>
 									<td><cfselect name="localCodekey" query="qEditGetSelectCodekeys" display="description" value="id" queryPosition="below">
 												<option value="0">Select a discipline</option>
 											</cfselect>
