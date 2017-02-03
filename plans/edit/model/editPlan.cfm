@@ -1,5 +1,5 @@
 <!--- Edit Plan Model --->
-<!--- Thomas Dye, September 2016 --->
+<!--- Thomas Dye, September 2016, February 2017 --->
 <cfif !isDefined("messageBean")>
 	<cflocation url="..">
 </cfif>
@@ -111,11 +111,9 @@
 						</table>
 
 						<!--- Display courses by category --->
-						
-						<cfdump var="#qEditGetCourses#">			
 						<cfloop query="#qEditGetCategories#">
 							<cfquery dbtype="query" name="qEditGetCategoryCourses">
-								SELECT c_id, course_number, title, cc_id, cc_credit, credit, sc_id, min_credit, max_credit
+								SELECT c_id, course_number, title, cc_id, cc_credit, credit, gc_id, sc_id, min_credit, max_credit
 								FROM qEditGetCourses
 								WHERE degree_categories_id = #qEditGetCategories.degree_categories_id#
 							</cfquery>
@@ -156,19 +154,19 @@
 														<!--- If selected course credit was variable, cell is blank --->
 														<cfelseif !len(qEditGetCategoryCourses.credit)>
 															<cfinput type="hidden" name="creditId" value="#qEditGetCategoryCourses.sc_id#">
+															<!--- Set the minimum credit --->
+															<cfset variableCredit="#Val(qEditGetCategoryCourses.min_credit)#">
 															<!--- Use a selector box to choose the variable credits --->
 															<cfselect name="courseCredit">
 																<option value="0">
 																	Choose
 																</option>
-																<!--- Set the minimum credit --->
-																<cfset credit=Val(qEditGetCategoryCourses.min_credit)>
-																<!--- Display the range as integers --->
+																<!--- Display the available range of credits as integers --->
 																<cfloop from=1 to="#Val(qEditGetCategoryCourses.max_credit) - Val(qEditGetCategoryCourses.min_credit) + 1#" index="i">
-																	<option value="#credit#">
-																		#credit#
+																	<option value="#variableCredit#">
+																		#variableCredit#
 																	</option>
-																	<cfset credit=credit + 1>
+																	<cfset variableCredit=variableCredit + 1>
 																</cfloop>
 															</cfselect>
 														<!--- The selected course credit was not variable --->
@@ -180,6 +178,11 @@
 													
 													<!--- Display course status --->
 													<td>
+														<cfif len(qEditGetCategoryCourses.cc_id)>
+															Complete
+														<cfelseif len(qEditGetCategoryCourses.gc_id)>
+															Optional
+														</cfif>
 													</td>
 													
 													<!--- Display remove checkboxes --->

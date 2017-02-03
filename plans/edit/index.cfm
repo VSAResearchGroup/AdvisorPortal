@@ -1,5 +1,5 @@
 <!--- Edit Plan Controller --->
-<!--- Thomas Dye, September 2016 --->
+<!--- Thomas Dye, September 2016, February 2017 --->
 <cfif !(isDefined("session.studentId") || IsUserInRole("student"))>
 	<cflocation url="..">
 </cfif>
@@ -26,6 +26,13 @@
 <cfif !qEditGetPlan.RecordCount>
 	<cflocation url="..">
 </cfif>
+
+<!--- Update the list of completed courses --->
+<cfstoredproc procedure="updatePLAN_SELECTEDCOURSES">
+	<cfprocparam value="#qEditGetPlan.degrees_id#" cfsqltype="cf_sql_integer">
+	<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
+	<cfprocparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
+</cfstoredproc>
 
 <!--- Define the "Save" button action --->
 <cfif isDefined("form.saveButton")>
@@ -63,23 +70,26 @@
 
 <!--- Get all courses saved for this plan --->
 <cfquery name="qEditGetCourses">
-	SELECT c.course_number, c.title, sc.credit, sc.id AS sc_id,
-		c.id AS c_id, c.departments_id, sc.degree_categories_id, dcat.category,
-		gc.courses_id AS gc_id, cc.id AS cc_id, cc.credit AS cc_credit,
-		c.min_credit, c.max_credit
-	FROM PLAN_SELECTEDCOURSES sc
-	JOIN COURSES c
-	ON c.id = sc.courses_id
-	JOIN DEGREE_CATEGORIES dcat
-	ON dcat.id = sc.degree_categories_id
-	LEFT JOIN (SELECT id, credit
-		FROM STUDENTS_COMPLETEDCOURSES
-		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS cc
-	ON sc.completedcourses_id = cc.id
-	LEFT JOIN DEGREE_GRADUATION_COURSES gc
-	ON c.id = gc.courses_id
-	WHERE sc.plans_id = <cfqueryparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
-	ORDER BY c.course_number
+	SELECT planSelectedCourses.id AS sc_id, planSelectedCourses.degree_categories_id, planSelectedCourses.credit,
+		courses.id AS c_id, courses.course_number, courses.title, courses.min_credit, courses.max_credit, courses.departments_id,
+		degreeCategories.category,
+		degreeGraduationCourses.courses_id AS gc_id,
+		studentCompletedCourses.id AS cc_id, studentCompletedCourses.credit AS cc_credit
+	FROM PLAN_SELECTEDCOURSES planSelectedCourses
+		JOIN COURSES courses
+		ON planSelectedCourses.courses_id = courses.id
+		JOIN DEGREE_CATEGORIES degreeCategories
+		ON planSelectedCourses.degree_categories_id = degreeCategories.id
+		LEFT JOIN (SELECT courses_id
+			FROM DEGREE_GRADUATION_COURSES
+			WHERE degrees_id = <cfqueryparam value="#qEditGetPlan.degrees_id#" cfsqltype="cf_sql_integer">) AS degreeGraduationCourses
+		ON planSelectedCourses.courses_id = degreeGraduationCourses.courses_id
+		LEFT JOIN (SELECT id, credit
+			FROM STUDENTS_COMPLETEDCOURSES
+			WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS studentCompletedCourses
+		ON planSelectedCourses.completedcourses_id = studentCompletedCourses.id
+	WHERE planSelectedCourses.plans_id = <cfqueryparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
+	ORDER BY courses.id
 </cfquery>
 
 <cfquery dbtype="query" name="qEditGetCategories">
@@ -180,7 +190,7 @@
 	<!--- Looks good, so add course to plan --->
 	<cfquery>
 		INSERT INTO PLAN_SELECTEDCOURSES (
-			plans_id, courses_id, categories_id, credit
+			plans_id, courses_id, degree_categories_id, credit
 		) VALUES (
 			<cfqueryparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">,
 			<cfqueryparam value="#qEditGetCourse.id#" cfsqltype="cf_sql_integer">,
