@@ -27,13 +27,6 @@
 	<cflocation url="..">
 </cfif>
 
-<!--- Update the list of completed courses --->
-<cfstoredproc procedure="updatePLAN_SELECTEDCOURSES">
-	<cfprocparam value="#qEditGetPlan.degrees_id#" cfsqltype="cf_sql_integer">
-	<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
-	<cfprocparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
-</cfstoredproc>
-
 <!--- Define the "Save" button action --->
 <cfif isDefined("form.saveButton")>
 	<cfset planName=canonicalize(trim(form.planName), true, true)>
@@ -115,6 +108,14 @@
 				</cfquery>
 			</cfif>
 		</cfloop>
+		
+		<!--- Check to see if we can mark this as complete now --->
+		<cfif form.courseCredit NEQ 0>
+			<cfstoredproc procedure="updatePLAN_SELECTEDCOURSES">
+				<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
+				<cfprocparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
+			</cfstoredproc>
+		</cfif>
 	</cfif>
 	
 	<!--- Process status select boxes --->
@@ -202,6 +203,12 @@
 			</cfif>
 		)
 	</cfquery>
+	
+	<!--- Update the list of completed courses for this plan --->
+	<cfstoredproc procedure="updatePLAN_SELECTEDCOURSES">
+		<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
+		<cfprocparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
+	</cfstoredproc>
 	
 	<!--- Refresh the page --->
 	<cflocation url="./?plan=#URLEncodedFormat(qEditGetPlan.id)#">
