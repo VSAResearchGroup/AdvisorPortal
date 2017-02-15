@@ -31,8 +31,47 @@
 	        <div id="page-content" class="page-plus-side">
 	            <div class="content">
 	                <span property="dc:title" content="Dashboard" class="rdf-meta element-hidden"></span>
-	
-                	<cfif qDashboardGetActivePlan.RecordCount>
+
+					<cfif !qDashboardGetPlacementCourses.RecordCount>
+						<h2>Add placement courses</h2>
+						<cfform>
+							<table>
+								<cfif messageBean.hasErrors() && isDefined("form.addPlacementButton")>
+									<tr>
+										<td colspan="2">
+											<div id="form-errors">
+												<ul>
+													<cfloop array="#messageBean.getErrors()#" index="error">
+														<cfoutput><li>#error.message#</li></cfoutput>
+													</cfloop>
+												</ul>
+											</div>											
+										</td>
+									</tr>
+								</cfif>
+								<tr>
+									<th width="20%">Math</th>
+									<th width="20%">English</th>
+									<th></th>
+								</tr>
+								<tr>
+									<td>
+										<cfselect name="mathCourse" query="qDashboardGetMathCourses" display="course_number" value="id" queryPosition="below">
+											<option value="0">Select course:</option>
+										</cfselect>
+									</td>
+									<td>
+										<cfselect name="englishCourse" query="qDashboardGetEnglishCourses" display="course_number" value="id" queryPosition="below">
+											<option value="0">Select course:</option>
+										</cfselect>
+									</td>
+									<td>
+										<cfinput type="submit" name="addPlacementButton" value="Add">
+									</td>
+								</tr>
+							</table>
+						</cfform>
+                	<cfelseif qDashboardGetActivePlan.RecordCount>
 						<h2>Active Plan: <cfoutput>#qDashboardGetActivePlan.plan_name#</cfoutput></h2>
 
 						<p>

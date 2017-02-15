@@ -27,6 +27,35 @@
 				WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">)))
 </cfquery>
 
+<cfquery name="qDashboardGetPlacementCourses">
+	SELECT p.math_courses_id, m.course_number AS math_course_number, p.english_courses_id, e.course_number AS english_course_number
+	FROM STUDENT_PLACEMENTCOURSES p
+		JOIN COURSES m
+		ON m.id = p.math_courses_id
+		JOIN COURSES e
+		ON e.id = p.english_courses_id
+	WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">
+</cfquery>
+
+<!--- Get valid math and english courses if placement courses have not been entered --->
+<cfif !qDashboardGetPlacementCourses.RecordCount>
+	<cfquery name="qDashboardGetMathCourses">
+		SELECT id, course_number
+		FROM COURSES
+		WHERE use_catalog = 1
+		AND course_number LIKE 'MATH%'
+		ORDER BY course_number
+	</cfquery>
+	
+	<cfquery name="qDashboardGetEnglishCourses">
+		SELECT id, course_number
+		FROM COURSES
+		WHERE use_catalog = 1
+		AND course_number LIKE 'ENGL%'
+		ORDER BY course_number
+	</cfquery>
+</cfif>
+
 <!--- Populate arrays to render display output --->
 <cfif qDashboardGetActivePlan.RecordCount>
 	<!--- Get all courses saved for this plan --->
@@ -58,6 +87,40 @@
 		FROM qDashboardGetCourses
 		ORDER BY degree_categories_id
 	</cfquery>
+</cfif>
+
+<!--- Define the placement courses "add" button action --->
+<cfif isDefined("form.addPlacementButton")>
+	
+	<!--- Perform simple validation on form fields --->
+	<cfif form.mathCourse EQ 0>
+		<cfset messageBean.addError('Please select a math course.', 'mathCourse')>
+	</cfif>
+	<cfif form.englishCourse EQ 0>
+		<cfset messageBean.addError('Please select an english course.', 'englishCourse')>
+	</cfif>
+	
+	<!--- Stop here if errors were detected --->
+	<cfif messageBean.hasErrors()>
+		<cfinclude template="model/dashboard.cfm">
+		<cfreturn>
+	</cfif>
+	
+	<!--- Looks good, so create record for placement courses --->
+	<cfquery>
+		INSERT INTO STUDENT_PLACEMENTCOURSES (
+			students_accounts_id, math_courses_id, english_courses_id
+		) VALUES (
+			<cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">,
+			<cfqueryparam value="#form.mathCourse#" cfsqltype="cf_sql_integer">,
+			<cfqueryparam value="#form.englishCourse#" cfsqltype="cf_sql_integer">
+		)
+	</cfquery>
+	
+	<!--- Refresh page if there were no errors --->
+	<cfif !messageBean.hasErrors()>
+		<cflocation url="./">
+	</cfif>
 </cfif>
 
 <!--- Display page --->
