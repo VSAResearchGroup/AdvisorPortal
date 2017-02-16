@@ -27,17 +27,13 @@
 				WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">)))
 </cfquery>
 
+<!--- Get valid math and english courses if placement courses have not been entered --->
 <cfquery name="qDashboardGetPlacementCourses">
-	SELECT p.math_courses_id, m.course_number AS math_course_number, p.english_courses_id, e.course_number AS english_course_number
-	FROM STUDENT_PLACEMENTCOURSES p
-		JOIN COURSES m
-		ON m.id = p.math_courses_id
-		JOIN COURSES e
-		ON e.id = p.english_courses_id
+	SELECT math_courses_id, english_courses_id
+	FROM STUDENT_PLACEMENTCOURSES
 	WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">
 </cfquery>
 
-<!--- Get valid math and english courses if placement courses have not been entered --->
 <cfif !qDashboardGetPlacementCourses.RecordCount>
 	<cfquery name="qDashboardGetMathCourses">
 		SELECT id, course_number
