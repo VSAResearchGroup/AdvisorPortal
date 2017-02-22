@@ -111,7 +111,7 @@
 		
 		<!--- Check to see if we can mark this as complete now --->
 		<cfif form.courseCredit NEQ 0>
-			<cfstoredproc procedure="updatePLAN_SELECTEDCOURSES">
+			<cfstoredproc datasource="advisorPortal" procedure="updatePLAN_SELECTEDCOURSES">
 				<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
 				<cfprocparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
 			</cfstoredproc>

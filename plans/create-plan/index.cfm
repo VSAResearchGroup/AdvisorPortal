@@ -27,87 +27,40 @@
 
 <!--- Define action for degree "select" button from search results --->
 <cfif isDefined("form.addDegreeButton")>
-	<!--- Create a student plan --->
-	<cfquery>
-		INSERT INTO PLANS (
-			students_accounts_id, plan_name
-		) VALUES (
-			<cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">,
-			<cfqueryparam value="#form.degreeName#" cfsqltype="cf_sql_varchar">
-		)
-	</cfquery>
 	
-	<!--- Retrieve the new plan ID --->
-	<cfquery name=qGetPlan>
-		SELECT @@identity AS id
-		FROM PLANS
-	</cfquery>
+	<cfstoredproc datasource="advisorPortal" procedure="createPLANS" returncode="true">
+		<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
+		<cfprocparam value="#form.degreeId#" cfsqltype="cf_sql_integer">
+		<cfprocparam value="#form.collegeId#" cfsqltype="cf_sql_integer">
+		<cfprocparam value="#form.degreeName#" cfsqltype="cf_sql_varchar">
+	</cfstoredproc>
 	
-	<!--- Associate the degree with the new plan --->
-	<cfquery>
-		INSERT INTO PLAN_SELECTEDDEGREES (
-			plans_id, degrees_id
-		) VALUES (
-			<cfqueryparam value="#qGetPlan.id#" cfsqltype="cf_sql_integer">,
-			<cfqueryparam value="#form.degreeId#" cfsqltype="cf_sql_integer">
-		)
-	</cfquery>
-	
-	<!--- If the student has no active plans, make this the active plan --->
-	<cfquery name=qCheckActivePlans>
-		SELECT plans_id
-		FROM PLAN_ACTIVEPLANS
-		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">
-	</cfquery>
-	<cfif !qCheckActivePlans.RecordCount>
-		<cfquery>
-			INSERT INTO PLAN_ACTIVEPLANS (
-				plans_id, students_accounts_id
-			) VALUES (
-				<cfqueryparam value="#qGetPlan.id#" cfsqltype="cf_sql_integer">,
-				<cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">
-			)
-		</cfquery>
-	</cfif>
-	
-	<!--- Get all available admission and graduation courses for this college and degree --->
-	<cfquery name=qGetCourses>
-		SELECT cou.id, deg.degree_categories_id, cou.min_credit, cou.max_credit
+<!---	<!--- Get all the college admission courses next --->
+	<cfquery name=qGetCollegeCourses>
+		SELECT cou.id, cou.min_credit, cou.max_credit
 		FROM COURSES cou
-		JOIN DEGREE_ADMISSION_COURSES deg
-		ON cou.id = deg.courses_id
+		JOIN COLLEGE_ADMISSION_COURSES col
+		ON cou.id = col.courses_id
 		WHERE cou.use_catalog = 1
-		AND deg.degrees_id = <cfqueryparam value="#form.degreeId#" cfsqltype="cf_sql_integer">
-		UNION
-		SELECT cou.id, deg.degree_categories_id, cou.min_credit, cou.max_credit
-		FROM COURSES cou
-		JOIN DEGREE_GRADUATION_COURSES deg
-		ON cou.id = deg.courses_id
-		WHERE cou.use_catalog = 1
-		AND deg.degrees_id = <cfqueryparam value="#form.degreeId#" cfsqltype="cf_sql_integer">
+		AND col.colleges_id = <cfqueryparam value="#form.collegeId#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	
-	<!--- Add available courses to plan --->
-	<cfif qGetCourses.RecordCount>
-		<cfloop query="qGetCourses">
-			<cfquery>
-				INSERT INTO PLAN_SELECTEDCOURSES (
-					plans_id, courses_id, degree_categories_id, credit
-				) VALUES (
-					<cfqueryparam value="#qGetPlan.id#" cfsqltype="cf_sql_integer">,
-					<cfqueryparam value="#qGetCourses.id#" cfsqltype="cf_sql_integer">,
-					<cfqueryparam value="#qGetCourses.degree_categories_id#" cfsqltype="cf_sql_integer">,
-					<cfif len(qGetCourses.min_credit)>
-						NULL
-					<cfelse>
-						<cfqueryparam value="#qGetCourses.max_credit#" cfsqltype="cf_sql_decimal">
-					</cfif>
-				)
+	<!--- Add the college inherited courses to the plan --->
+	<cfif qGetCollegeCourses.RecordCount>
+		<cfloop query="qGetCollegeCourses">
+			<!--- Check if this course is already listed in degree requirements --->
+			<cfquery dbtype="query" name="qCheckExistsDegreeCourse">
+				SELECT id
+				FROM qGetDegreeCourses
+				WHERE id = <cfqueryparam value="#qGetCollegeCourses.id#" cfsqltype="cf_sql_integer">
 			</cfquery>
+			
+			<!--- Only add the course if it is not already listed --->
+			<cfif !qCheckExistsDegreeCourse.RecordCount>
+				
+			</cfif>
 		</cfloop>
-	</cfif>
-	
-	<!--- ToDo:  Still need to inherit college admission courses and place into PLAN_SELECTEDCOURSES in appropriate degree_categories --->
+	</cfif>--->
 	
 	<!--- Clear the session state for plan creation --->
 	<cfset StructDelete(session, "searchFilter")>
@@ -115,7 +68,7 @@
 	<cfset StructDelete(session, "aDepartments")>
 	
 	<!--- Redirect to the edit plan page for user confirmation --->
-	<cflocation url="../edit/?plan=#URLEncodedFormat(qGetPlan.id)#">
+	<cflocation url="../edit/?plan=#URLEncodedFormat(cfstoredproc.statusCode)#">
 </cfif>
 
 <!--- Prepare filter lists --->
