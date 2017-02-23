@@ -59,6 +59,11 @@
 	SELECT id, category
 	FROM DEGREE_CATEGORIES
 	WHERE degrees_id = <cfqueryparam value="#qEditGetPlan.degrees_id#" cfsqltype="cf_sql_integer">
+	ORDER BY
+		CASE
+			WHEN category = 'College Admission Courses' THEN '1'
+			ELSE id
+		END ASC
 </cfquery>
 
 <!--- Get all courses saved for this plan --->
@@ -85,10 +90,19 @@
 	ORDER BY courses.id
 </cfquery>
 
-<cfquery dbtype="query" name="qEditGetCategories">
-	SELECT DISTINCT degree_categories_id, category
-	FROM qEditGetCourses
-	ORDER BY degree_categories_id
+<cfquery name="qEditGetCategories">
+	SELECT d.id, d.category
+	FROM DEGREE_CATEGORIES d
+	JOIN (SELECT DISTINCT plans_id, degree_categories_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE plans_id = <cfqueryparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">) AS p
+	ON d.id = p.degree_categories_id
+	WHERE d.degrees_id = <cfqueryparam value="#qEditGetPlan.degrees_id#" cfsqltype="cf_sql_integer">
+	ORDER BY
+		CASE
+			WHEN d.category = 'College Admission Courses' THEN '1'
+			ELSE d.id
+		END ASC
 </cfquery>
 
 <!--- Define "Update" button behavior --->
@@ -205,7 +219,7 @@
 	</cfquery>
 	
 	<!--- Update the list of completed courses for this plan --->
-	<cfstoredproc procedure="updatePLAN_SELECTEDCOURSES">
+	<cfstoredproc datasource="advisorPortal" procedure="updatePLAN_SELECTEDCOURSES">
 		<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
 		<cfprocparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">
 	</cfstoredproc>

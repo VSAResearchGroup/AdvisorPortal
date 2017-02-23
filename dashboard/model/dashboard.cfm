@@ -101,7 +101,7 @@
 								<cfquery dbtype="query" name="qDashboardGetCategoryCourses">
 									SELECT c_id, course_number, title, cc_id, cc_credit, credit, gc_id, sc_id, min_credit, max_credit
 									FROM qDashboardGetCourses
-									WHERE degree_categories_id = #qDashboardGetCategories.degree_categories_id#
+									WHERE degree_categories_id = #qDashboardGetCategories.id#
 								</cfquery>
 								
 								<hr/>

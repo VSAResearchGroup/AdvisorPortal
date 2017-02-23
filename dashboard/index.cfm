@@ -78,10 +78,19 @@
 		ORDER BY courses.id
 	</cfquery>
 	
-	<cfquery dbtype="query" name="qDashboardGetCategories">
-		SELECT DISTINCT degree_categories_id, category
-		FROM qDashboardGetCourses
-		ORDER BY degree_categories_id
+	<cfquery name="qDashboardGetCategories">
+		SELECT d.id, d.category
+		FROM DEGREE_CATEGORIES d
+		JOIN (SELECT DISTINCT plans_id, degree_categories_id
+			FROM PLAN_SELECTEDCOURSES
+			WHERE plans_id = <cfqueryparam value="#qDashboardGetActivePlan.plans_id#" cfsqltype="cf_sql_integer">) AS p
+		ON d.id = p.degree_categories_id
+		WHERE d.degrees_id = <cfqueryparam value="#qDashboardGetActivePlan.degrees_id#" cfsqltype="cf_sql_integer">
+		ORDER BY
+			CASE
+				WHEN d.category = 'College Admission Courses' THEN '1'
+				ELSE d.id
+			END ASC
 	</cfquery>
 </cfif>
 

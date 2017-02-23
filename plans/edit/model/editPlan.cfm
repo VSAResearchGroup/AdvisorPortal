@@ -115,7 +115,7 @@
 							<cfquery dbtype="query" name="qEditGetCategoryCourses">
 								SELECT c_id, course_number, title, cc_id, cc_credit, credit, gc_id, sc_id, min_credit, max_credit
 								FROM qEditGetCourses
-								WHERE degree_categories_id = #qEditGetCategories.degree_categories_id#
+								WHERE degree_categories_id = #qEditGetCategories.id#
 							</cfquery>
 							
 							<hr/>
