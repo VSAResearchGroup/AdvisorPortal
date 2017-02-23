@@ -28,39 +28,13 @@
 <!--- Define action for degree "select" button from search results --->
 <cfif isDefined("form.addDegreeButton")>
 	
+	<!--- Create, then add all admission and graduation courses to this plan --->
 	<cfstoredproc datasource="advisorPortal" procedure="createPLANS" returncode="true">
 		<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
 		<cfprocparam value="#form.degreeId#" cfsqltype="cf_sql_integer">
 		<cfprocparam value="#form.collegeId#" cfsqltype="cf_sql_integer">
 		<cfprocparam value="#form.degreeName#" cfsqltype="cf_sql_varchar">
 	</cfstoredproc>
-	
-<!---	<!--- Get all the college admission courses next --->
-	<cfquery name=qGetCollegeCourses>
-		SELECT cou.id, cou.min_credit, cou.max_credit
-		FROM COURSES cou
-		JOIN COLLEGE_ADMISSION_COURSES col
-		ON cou.id = col.courses_id
-		WHERE cou.use_catalog = 1
-		AND col.colleges_id = <cfqueryparam value="#form.collegeId#" cfsqltype="cf_sql_integer">
-	</cfquery>
-	
-	<!--- Add the college inherited courses to the plan --->
-	<cfif qGetCollegeCourses.RecordCount>
-		<cfloop query="qGetCollegeCourses">
-			<!--- Check if this course is already listed in degree requirements --->
-			<cfquery dbtype="query" name="qCheckExistsDegreeCourse">
-				SELECT id
-				FROM qGetDegreeCourses
-				WHERE id = <cfqueryparam value="#qGetCollegeCourses.id#" cfsqltype="cf_sql_integer">
-			</cfquery>
-			
-			<!--- Only add the course if it is not already listed --->
-			<cfif !qCheckExistsDegreeCourse.RecordCount>
-				
-			</cfif>
-		</cfloop>
-	</cfif>--->
 	
 	<!--- Clear the session state for plan creation --->
 	<cfset StructDelete(session, "searchFilter")>

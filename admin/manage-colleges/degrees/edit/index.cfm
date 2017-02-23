@@ -207,6 +207,12 @@
 		WHERE degree_categories_id = <cfqueryparam value="#form.categoryId#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	
+	<cfquery name="qEditCheckCategorySelectedCourses">
+		SELECT id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE degree_categories_id = <cfqueryparam value="#form.categoryId#" cfsqltype="cf_sql_integer">
+	</cfquery>
+	
 	<cfif qEditCheckAdmCourseCategory.RecordCount>
 		<cfset messageBean.addError('This degree category is in use by admission courses and cannot be deleted.', 'delCategory')>
 	</cfif>
@@ -221,6 +227,10 @@
 	
 	<cfif qEditCheckGrdDegreeCategory.RecordCount>
 		<cfset messageBean.addError('This degree category is in use by graduation degree categories and cannot be deleted.', 'delCategory')>
+	</cfif>
+	
+	<cfif qEditCheckCategorySelectedCourses.RecordCount>
+		<cfset messageBean.addError('This degree category is in use by student degree plans and cannot be deleted.', 'delCategory')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->
