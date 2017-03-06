@@ -1,12 +1,13 @@
 <!--- Edit Department Model --->
 <!--- Karan	Kalra, November 2016 --->
+<!--- Thomas Dye, March 2017 --->
 <cfif !isDefined("messageBean")>
 	<cflocation url="..">
 </cfif>
 
 <cfmodule template="../../../../header.cfm"
 
-	pagetitle="Advisor Services Portal - Edit Course">
+	pagetitle="Advisor Services Portal - Edit Department">
 	
 	<div class="resize-box">
 		
@@ -23,14 +24,14 @@
 
 	        <div id="page-content" class="page-plus-side">
 	            <div class="content">
-	                <span property="dc:title" content="Edit Course" class="rdf-meta element-hidden"></span>
+	                <span property="dc:title" content="Edit Department" class="rdf-meta element-hidden"></span>
 	
 	                <div class="content">
 
 						<h2>Basic Details</h2>
 				    	<table>
 				    		<cfform>
-						    	<cfif messageBean.hasErrors() && isDefined("form.updateCourseInfoButton")>
+						    	<cfif messageBean.hasErrors() && isDefined("form.updateDepartmentInfoButton")>
 									<tr>
 										<td colspan="3">
 											<div id="form-errors">
@@ -59,9 +60,20 @@
 						    		<td><label for="">Abv Title2:</label></td>
 						    		<td colspan="2"><cfinput type="text" id="departmentAbvTitle2" name="departmentAbvTitle2" value="#qEditGetDepartment.abv_title2#"></td>
 						    	</tr>
+						    	<cfif IsUserInRole("administrator")>
+							    	<tr>
+							    		<td>Availability:</td>
+										<td>
+											<cfinput type="radio" id="active" name="departmentAvailability" value="1" checked="#status1#">
+											<cfoutput><label for="active"> available</label></cfoutput> </br>
+											<cfinput type="radio" id="inactive" name="departmentAvailability" value="0" checked="#status2#">
+											<cfoutput><label for="inactive"> hidden</label></cfoutput><br>
+										</td>
+							    	</tr>
+						    	</cfif>
 						    	<tr>
 						    		<td></td>
-						    		<td colspan="2"><cfinput type="submit" name="updateCourseInfoButton" value="Update details"></td>
+						    		<td colspan="2"><cfinput type="submit" name="updateDepartmentInfoButton" value="Update details"></td>
 						    	</tr>
 				    		</cfform>
 				    	</table>
@@ -75,7 +87,7 @@
 						    		<td><textarea name="departmentIntro" rows="5" cols="70"><cfoutput>#qEditGetDepartment.dept_intro#</cfoutput></textarea></td>
 						    	</tr>
 						    	<tr>
-						    		<td><cfinput type="submit" name="updateDepartmentDescButton" value="Update description"></td>
+						    		<td><cfinput type="submit" name="updateDepartmentIntroButton" value="Update description"></td>
 						    	</tr>
 						    </cfform>
 				    	</table>
