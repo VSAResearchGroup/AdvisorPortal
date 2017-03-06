@@ -20,9 +20,10 @@
 
 <!--- Prepare admission requirements contents --->
 <cfquery name="qEditGetAdmissionCourses">
-	SELECT a.foreign_course_number, c.id, c.course_number
-	FROM COLLEGE_ADMISSION_COURSES a, COURSES c
+	SELECT a.foreign_course_number, c.id, c.course_number, cat.category
+	FROM COLLEGE_ADMISSION_COURSES a, COURSES c, CATEGORIES cat
 	WHERE a.courses_id = c.id
+	AND a.categories_id = cat.id
 	AND a.colleges_id = <cfqueryparam value="#qEditGetCollege.id#" cfsqltype="cf_sql_integer">
 </cfquery>
 
@@ -40,6 +41,11 @@
 	JOIN CODEKEYS c
 	ON a.codekeys_id = c.id
 	WHERE a.colleges_id = <cfqueryparam value="#qEditGetCollege.id#" cfsqltype="cf_sql_integer">
+</cfquery>
+
+<cfquery name="qEditGetSelectCategories">
+	SELECT id, category
+	FROM CATEGORIES
 </cfquery>
 
 <cfquery name="qEditGetSelectDepartments">
@@ -192,7 +198,11 @@
 	
 	<!--- Perform simple validation on form fields --->
 	<cfif !len(trim(form.localCourse))>
-		<cfset messageBean.addError('A community college equivalent course number is required.', 'localCourse')>
+		<cfset messageBean.addError('An EvCC equivalent course number is required.', 'localCourse')>
+	</cfif>
+	
+	<cfif form.localCourseCategory EQ 0>
+		<cfset messageBean.addError('Please select a category.', 'localCourseCategory')>
 	</cfif>
 	
 	<cfif !len(trim(form.foreignCourse))>
@@ -216,7 +226,7 @@
 	</cfquery>
 	
 	<cfif !qEditGetCourse.RecordCount>
-		<cfset messageBean.addError('The community college course could not be found.', 'localCourse')>
+		<cfset messageBean.addError('The EvCC course could not be found.', 'localCourse')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->
@@ -234,7 +244,7 @@
 	</cfquery>
 	
 	<cfif qEditCheckCourse.RecordCount>
-		<cfset messageBean.addError('This community college course is already an admission requirement.', 'localCourse')>
+		<cfset messageBean.addError('This EvCC course is already an admission requirement.', 'localCourse')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->
@@ -248,10 +258,11 @@
 	
 	<cfquery>
 		INSERT INTO COLLEGE_ADMISSION_COURSES (
-			colleges_id, courses_id, foreign_course_number
+			colleges_id, courses_id, categories_id, foreign_course_number
 		) VALUES (
 			<cfqueryparam value="#qEditGetCollege.id#" cfsqltype="cf_sql_integer">,
 			<cfqueryparam value="#qEditGetCourse.id#" cfsqltype="cf_sql_integer">,
+			<cfqueryparam value="#form.localCourseCategory#" cfsqltype="cf_sql_integer">,
 			<cfqueryparam value="#foreignCourse#" cfsqltype="cf_sql_varchar">
 		)
 	</cfquery>
@@ -332,7 +343,7 @@
 	</cfquery>
 
 	<cfif !qEditGetDepartment.RecordCount>
-		<cfset messageBean.addError('The community college department could not be found.', 'localDepartment')>
+		<cfset messageBean.addError('The EvCC department could not be found.', 'localDepartment')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->
@@ -350,7 +361,7 @@
 	</cfquery>
 	
 	<cfif qEditCheckDepartment.RecordCount>
-		<cfset messageBean.addError('This community college department is already an admission requirement.', 'localDepartment')>
+		<cfset messageBean.addError('This EvCC department is already an admission requirement.', 'localDepartment')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->
@@ -443,7 +454,7 @@
 	</cfquery>
 
 	<cfif !qEditGetCodekey.RecordCount>
-		<cfset messageBean.addError('The community college discipline could not be found.', 'localCodekey')>
+		<cfset messageBean.addError('The EvCC discipline could not be found.', 'localCodekey')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->
@@ -461,7 +472,7 @@
 	</cfquery>
 	
 	<cfif qEditCheckCodekey.RecordCount>
-		<cfset messageBean.addError('This community college discipline is already an admission requirement.', 'localCodekey')>
+		<cfset messageBean.addError('This EvCC discipline is already an admission requirement.', 'localCodekey')>
 	</cfif>
 	
 	<!--- Stop here if errors were detected --->

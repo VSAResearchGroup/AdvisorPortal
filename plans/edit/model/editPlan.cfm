@@ -66,6 +66,133 @@
 		                	</cfform>
 						</table>
 						
+						<cfset c11Len = "#arrayLen(aCategory11)#">
+						<cfset c12Len = "#arrayLen(aCategory12)#">
+						<cfset c13Len = "#arrayLen(aCategory13)#">
+						<cfset c14Len = "#arrayLen(aCategory14)#">
+						
+						<cfif c11Len gte c12Len && c11Len gte c13Len && c11Len gte c14Len>
+							<cfset maxLength1 = c11Len>
+						<cfelseif c12Len gte c11Len && c12Len gte c13Len && c12Len gte c14Len>
+							<cfset maxLength1 = c12Len>
+						<cfelseif c13Len gte c11Len && c13Len gte c12Len && c13Len gte c14Len>
+ 							<cfset maxLength1 = c13Len>
+ 						<cfelse>
+ 							<cfset maxLength1 = c14Len>
+						</cfif>	
+ 							
+						<h2>My Schedule</h2>
+						
+						<h3>1st Year</h3>
+						<div id = "h4-box">
+						<table>
+							<tr>
+								<th>Fall</th>
+								<th>Winter</th>
+								<th>Spring</th>
+								<th>Summer</th>
+							</tr>
+							<cfform>
+								<cfloop from=1 to="#maxLength1#" index="Counter">
+									<tr>
+										<cfoutput>
+		                                   	<!--- Display code --->
+		                                   	<cfif Counter lte c11Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory11[Counter][5])#" title="#aCategory11[Counter][1]#">#aCategory11[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory11[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>					
+		                                   	<cfif Counter lte c12Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory12[Counter][5])#" title="#aCategory12[Counter][1]#">#aCategory12[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory12[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>					
+		                                   	<cfif Counter lte c13Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory13[Counter][5])#" title="#aCategory13[Counter][1]#">#aCategory13[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory13[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>
+		                                   	<cfif Counter lte c14Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory14[Counter][5])#" title="#aCategory14[Counter][1]#">#aCategory14[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory14[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>					
+		                                </cfoutput>
+									</tr>
+								</cfloop>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><cfinput type="submit" name="updateCourseButton" value="Remove"></td>
+								</tr>
+							</cfform>
+						</table>
+						</div>
+						
+						<cfset c21Len = "#arrayLen(aCategory21)#">
+						<cfset c22Len = "#arrayLen(aCategory22)#">
+						<cfset c23Len = "#arrayLen(aCategory23)#">
+						<cfset c24Len = "#arrayLen(aCategory24)#">
+						
+						<cfif c21Len gte c22Len && c21Len gte c23Len && c21Len gte c24Len>
+							<cfset maxLength2 = c21Len>
+						<cfelseif c22Len gte c21Len && c22Len gte c23Len && c22Len gte c24Len>
+							<cfset maxLength2 = c22Len>
+						<cfelseif c23Len gte c21Len && c23Len gte c22Len && c23Len gte c24Len>
+ 							<cfset maxLength2 = c23Len>
+ 						<cfelse>
+ 							<cfset maxLength2 = c24Len>
+						</cfif>	
+ 							
+						<h3>2nd Year</h3>
+						<div id = "h4-box">
+						<table>
+							<tr>
+								<th>Fall</th>
+								<th>Winter</th>
+								<th>Spring</th>
+								<th>Summer</th>
+							</tr>
+							<cfform>
+								<cfloop from=1 to="#maxLength2#" index="Counter">
+									<tr>
+										<cfoutput>
+		                                   	<!--- Display code --->
+		                                   	<cfif Counter lte c21Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory21[Counter][5])#" title="#aCategory21[Counter][1]#">#aCategory21[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory21[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>					
+		                                   	<cfif Counter lte c22Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory22[Counter][5])#" title="#aCategory22[Counter][1]#">#aCategory22[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory22[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>					
+		                                   	<cfif Counter lte c23Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory23[Counter][5])#" title="#aCategory23[Counter][1]#">#aCategory23[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory23[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>
+		                                   	<cfif Counter lte c24Len>
+		                                   		<td><a href="../../view/courses/?course=#URLEncodedFormat(aCategory24[Counter][5])#" title="#aCategory24[Counter][1]#">#aCategory24[Counter][1]#</a><cfinput type="checkbox" name="remove" value="#aCategory24[Counter][4]#"></td>
+		                                   	<cfelse>
+		                                   		<td></td>
+		                                   	</cfif>					
+		                                </cfoutput>
+									</tr>
+								</cfloop>
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td><cfinput type="submit" name="updateCourseButton" value="Remove"></td>
+								</tr>
+							</cfform>	
+						</table>
+						</div>
 						
 						<h2>Courses Remaining for Plan</h2>
 						<h3>Add a Course to Plan</h3>
@@ -94,6 +221,21 @@
 									<td>
 										<cfselect name="category" query="qEditGetSelectCategories" display="description" value="id" queryPosition="below" >
 											<option value="0">Select a category</option>
+										</cfselect>
+									</td>
+								</tr>
+								<tr>
+									<td><label for="quarter">Quarter:</label></td>
+									<td>
+										<cfselect name="quarter"> <option value="0">Select a quarter</option> <option value="1">Fall</option> <option value="2">Winter</option> 
+											<option value="3">Spring</option> <option value="4">Summer</option> 
+										</cfselect>
+									</td>
+								</tr>
+								<tr>
+									<td><label for="year">Year:</label></td>
+									<td>
+										<cfselect name="year"> <option value="0">Select a year</option> <option value="1">Year 1</option> <option value="2">Year 2</option>  
 										</cfselect>
 									</td>
 								</tr>

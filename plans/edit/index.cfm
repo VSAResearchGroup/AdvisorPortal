@@ -78,12 +78,22 @@
 <cfset aCategoryDIV=arraynew(2)>
 <cfset aCategoryE=arraynew(2)>
 
+<!--- Use arrays to store page output for quarter schedule --->
+<cfset aCategory11=arraynew(2)>
+<cfset aCategory12=arraynew(2)>
+<cfset aCategory13=arraynew(2)>
+<cfset aCategory14=arraynew(2)>
+<cfset aCategory21=arraynew(2)>
+<cfset aCategory22=arraynew(2)>
+<cfset aCategory23=arraynew(2)>
+<cfset aCategory24=arraynew(2)>
+
 <!--- Get all courses saved for this plan --->
 <cfquery name="qEditGetCourses">
 	SELECT c.course_number, c.title, sc.credit, sc.id AS sc_id,
 		c.id AS c_id, c.departments_id, sc.categories_id,
 		gc.courses_id AS gc_id, cc.id AS cc_id, cc.credit AS cc_credit,
-		c.min_credit, c.max_credit
+		c.min_credit, c.max_credit, sc.quarter, sc.year
 	FROM PLAN_SELECTEDCOURSES sc
 	JOIN COURSES c
 	ON c.id = sc.courses_id
@@ -335,6 +345,268 @@
 		WHERE categories_id = 8)
 </cfquery>
 
+<!--- Sort courses into storage arrays by year and quarter --->
+<cfloop query="qEditGetCourses">
+	<cfswitch expression="#qEditGetCourses.year#">
+		<cfcase value="1">
+			<cfswitch expression="#qEditGetCourses.quarter#">
+				<cfcase value="1">
+					<cfset row = #arrayLen(aCategory11)# + 1>
+					<cfset aCategory11[row][1]=course_number>
+					<cfset aCategory11[row][2]=title>
+					<cfset aCategory11[row][3]=credit>
+					<cfset aCategory11[row][4]=sc_id>
+					<cfset aCategory11[row][5]=c_id>
+					<cfset aCategory11[row][6]=departments_id>
+					<cfset aCategory11[row][7]=categories_id>
+					<cfset aCategory11[row][8]=gc_id>
+					<cfset aCategory11[row][9]=cc_id>
+					<cfset aCategory11[row][10]=cc_credit>
+					<cfset aCategory11[row][11]=min_credit>
+					<cfset aCategory11[row][12]=max_credit>
+					<cfset aCategory11[row][13]=quarter>
+					<cfset aCategory11[row][14]=year>
+				</cfcase>
+				<cfcase value="2">
+					<cfset row = #arrayLen(aCategory12)# + 1>
+					<cfset aCategory12[row][1]=course_number>
+					<cfset aCategory12[row][2]=title>
+					<cfset aCategory12[row][3]=credit>
+					<cfset aCategory12[row][4]=sc_id>
+					<cfset aCategory12[row][5]=c_id>
+					<cfset aCategory12[row][6]=departments_id>
+					<cfset aCategory12[row][7]=categories_id>
+					<cfset aCategory12[row][8]=gc_id>
+					<cfset aCategory12[row][9]=cc_id>
+					<cfset aCategory12[row][10]=cc_credit>
+					<cfset aCategory12[row][11]=min_credit>
+					<cfset aCategory12[row][12]=max_credit>
+					<cfset aCategory12[row][13]=quarter>
+					<cfset aCategory12[row][14]=year>
+				</cfcase>
+				<cfcase value="3">
+					<cfset row = #arrayLen(aCategory13)# + 1>
+					<cfset aCategory13[row][1]=course_number>
+					<cfset aCategory13[row][2]=title>
+					<cfset aCategory13[row][3]=credit>
+					<cfset aCategory13[row][4]=sc_id>
+					<cfset aCategory13[row][5]=c_id>
+					<cfset aCategory13[row][6]=departments_id>
+					<cfset aCategory13[row][7]=categories_id>
+					<cfset aCategory13[row][8]=gc_id>
+					<cfset aCategory13[row][9]=cc_id>
+					<cfset aCategory13[row][10]=cc_credit>
+					<cfset aCategory13[row][11]=min_credit>
+					<cfset aCategory13[row][12]=max_credit>
+					<cfset aCategory13[row][13]=quarter>
+					<cfset aCategory13[row][14]=year>
+				</cfcase>
+				<cfcase value="4">
+					<cfset row = #arrayLen(aCategory14)# + 1>
+					<cfset aCategory14[row][1]=course_number>
+					<cfset aCategory14[row][2]=title>
+					<cfset aCategory14[row][3]=credit>
+					<cfset aCategory14[row][4]=sc_id>
+					<cfset aCategory14[row][5]=c_id>
+					<cfset aCategory14[row][6]=departments_id>
+					<cfset aCategory14[row][7]=categories_id>
+					<cfset aCategory14[row][8]=gc_id>
+					<cfset aCategory14[row][9]=cc_id>
+					<cfset aCategory14[row][10]=cc_credit>
+					<cfset aCategory14[row][11]=min_credit>
+					<cfset aCategory14[row][12]=max_credit>
+					<cfset aCategory14[row][13]=quarter>
+					<cfset aCategory14[row][14]=year>
+				</cfcase>
+			</cfswitch>
+		</cfcase>
+		<cfcase value="2">
+			<cfswitch expression="#qEditGetCourses.quarter#">
+				<cfcase value="1">
+					<cfset row = #arrayLen(aCategory21)# + 1>
+					<cfset aCategory21[row][1]=course_number>
+					<cfset aCategory21[row][2]=title>
+					<cfset aCategory21[row][3]=credit>
+					<cfset aCategory21[row][4]=sc_id>
+					<cfset aCategory21[row][5]=c_id>
+					<cfset aCategory21[row][6]=departments_id>
+					<cfset aCategory21[row][7]=categories_id>
+					<cfset aCategory21[row][8]=gc_id>
+					<cfset aCategory21[row][9]=cc_id>
+					<cfset aCategory21[row][10]=cc_credit>
+					<cfset aCategory21[row][11]=min_credit>
+					<cfset aCategory21[row][12]=max_credit>
+					<cfset aCategory21[row][13]=quarter>
+					<cfset aCategory21[row][14]=year>
+				</cfcase>
+				<cfcase value="2">
+					<cfset row = #arrayLen(aCategory22)# + 1>
+					<cfset aCategory22[row][1]=course_number>
+					<cfset aCategory22[row][2]=title>
+					<cfset aCategory22[row][3]=credit>
+					<cfset aCategory22[row][4]=sc_id>
+					<cfset aCategory22[row][5]=c_id>
+					<cfset aCategory22[row][6]=departments_id>
+					<cfset aCategory22[row][7]=categories_id>
+					<cfset aCategory22[row][8]=gc_id>
+					<cfset aCategory22[row][9]=cc_id>
+					<cfset aCategory22[row][10]=cc_credit>
+					<cfset aCategory22[row][11]=min_credit>
+					<cfset aCategory22[row][12]=max_credit>
+					<cfset aCategory22[row][13]=quarter>
+					<cfset aCategory22[row][14]=year>
+				</cfcase>
+				<cfcase value="3">
+					<cfset row = #arrayLen(aCategory23)# + 1>
+					<cfset aCategory23[row][1]=course_number>
+					<cfset aCategory23[row][2]=title>
+					<cfset aCategory23[row][3]=credit>
+					<cfset aCategory23[row][4]=sc_id>
+					<cfset aCategory23[row][5]=c_id>
+					<cfset aCategory23[row][6]=departments_id>
+					<cfset aCategory23[row][7]=categories_id>
+					<cfset aCategory23[row][8]=gc_id>
+					<cfset aCategory23[row][9]=cc_id>
+					<cfset aCategory23[row][10]=cc_credit>
+					<cfset aCategory23[row][11]=min_credit>
+					<cfset aCategory23[row][12]=max_credit>
+					<cfset aCategory23[row][13]=quarter>
+					<cfset aCategory23[row][14]=year>
+				</cfcase>
+				<cfcase value="4">
+					<cfset row = #arrayLen(aCategory24)# + 1>
+					<cfset aCategory24[row][1]=course_number>
+					<cfset aCategory24[row][2]=title>
+					<cfset aCategory24[row][3]=credit>
+					<cfset aCategory24[row][4]=sc_id>
+					<cfset aCategory24[row][5]=c_id>
+					<cfset aCategory24[row][6]=departments_id>
+					<cfset aCategory24[row][7]=categories_id>
+					<cfset aCategory24[row][8]=gc_id>
+					<cfset aCategory24[row][9]=cc_id>
+					<cfset aCategory24[row][10]=cc_credit>
+					<cfset aCategory24[row][11]=min_credit>
+					<cfset aCategory24[row][12]=max_credit>
+					<cfset aCategory24[row][13]=quarter>
+					<cfset aCategory24[row][14]=year>
+				</cfcase>
+			</cfswitch>
+		</cfcase>
+	</cfswitch>
+</cfloop>
+
+<cfquery name="qEditGetSelectCourses11">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 1 and quarter = 1)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses12">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 1 and quarter = 2)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses13">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 1 and quarter = 3)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses14">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 1 and quarter = 4)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses21">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 2 and quarter = 1)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses22">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 2 and quarter = 2)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses23">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 2 and quarter = 3)
+</cfquery>
+
+<cfquery name="qEditGetSelectCourses24">
+	SELECT c.course_number, sc.id, sc.courses_id
+	FROM COURSES c JOIN (SELECT id, courses_id
+		FROM STUDENTS_COMPLETEDCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">) AS sc
+	ON c.id = sc.courses_id
+	WHERE sc.id NOT IN (SELECT completedcourses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE completedcourses_id IS NOT NULL)
+	AND sc.courses_id IN (SELECT courses_id
+		FROM PLAN_SELECTEDCOURSES
+		WHERE year = 2 and quarter = 4)
+</cfquery>
+
 <!--- Define "Update" button behavior --->
 <cfif isDefined("form.updateCourseButton")>
 
@@ -400,6 +672,14 @@
 		<cfset messageBean.addError('Please select a category.', 'category')>
 	</cfif>
 	
+	<cfif form.quarter EQ "0">
+		<cfset messageBean.addError('Please select a quarter', 'quarter')>
+	</cfif>
+	
+	<cfif form.year EQ "0">
+		<cfset messageBean.addError('Please select a year', 'year')>
+	</cfif>
+	
 	<!--- Stop here if errors were detected --->
 	<cfif messageBean.hasErrors()>
 		<cfinclude template="model/editPlan.cfm">
@@ -427,7 +707,7 @@
 	<!--- Looks good, so add course to plan --->
 	<cfquery>
 		INSERT INTO PLAN_SELECTEDCOURSES (
-			plans_id, courses_id, categories_id, credit
+			plans_id, courses_id, categories_id, credit, quarter, year
 		) VALUES (
 			<cfqueryparam value="#qEditGetPlan.id#" cfsqltype="cf_sql_integer">,
 			<cfqueryparam value="#qEditGetCourse.id#" cfsqltype="cf_sql_integer">,
@@ -436,7 +716,9 @@
 				NULL
 			<cfelse>
 				<cfqueryparam value="#qEditGetCourse.max_credit#" cfsqltype="cf_sql_decimal">
-			</cfif>
+			</cfif>,
+			<cfqueryparam value="#form.quarter#" cfsqltype="cf_sql_integer">,
+			<cfqueryparam value="#form.year#" cfsqltype="cf_sql_integer">
 		)
 	</cfquery>
 	
