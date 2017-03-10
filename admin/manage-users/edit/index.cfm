@@ -218,7 +218,10 @@
 	</cfif>
 	
 	<!--- Evaluate placement courses --->
-	<cfif (form.mathCourse NEQ 0 || form.englishCourse NEQ 0) && !messageBean.hasErrors()>
+	<cfif (isDefined("form.mathCourse") || isDefined("form.englishCourse")) &&
+		(form.mathCourse NEQ 0 || form.englishCourse NEQ 0) &&
+		!messageBean.hasErrors()>
+		
 		<cfif form.mathCourse EQ 0>
 			<cfset messageBean.addError('Please select a math course.', 'mathCourse')>
 		</cfif>
