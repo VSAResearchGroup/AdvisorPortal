@@ -11,8 +11,10 @@
 	<cfset this.sessionCookie.httpOnly=true>
 	<cfset this.sessionCookie.timeout='10'>
 	<cfset this.sessionCookie.disableupdate=true>
-	<cfset this.mappings['cfcMapping'] = "/AdvisorPortal/cfc" />
-	
+	<cfset this.directory = getDirectoryFromPath( getCurrentTemplatePath() )>
+	<cfset this.mappings['/cfcMapping'] = "#this.directory#cfc/" />
+	<cfset this.mappings['cfc'] = "#this.directory#cfc/" />
+
 	<!--- Intercept all page requests by website users --->
 	<cffunction name="onRequest">
 		<cfargument name="templatename">

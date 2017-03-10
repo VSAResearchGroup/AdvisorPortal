@@ -4,7 +4,7 @@
 	<cflocation url="..">
 </cfif>
 
-<cfset messageBean=createObject('#this.mappings['cfcMapping']#.messageBean').init()>
+<cfset messageBean=createObject('cfcMapping.messageBean').init()>
 
 <!--- Run when external page asks to create a degree plan --->
 <cfif isDefined("url.degree") && isDefined("url.id") && IsNumeric("#URLDecode(url.id)#")>

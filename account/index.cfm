@@ -1,6 +1,6 @@
 <!--- Account Controller --->
 <!--- Thomas Dye, August 2016 --->
-<cfset messageBean=createObject('#this.mappings['cfcMapping']#.messageBean').init()>
+<cfset messageBean=createObject('cfcMapping.messageBean').init()>
 
 <cfquery name="qAccountGetAccount">
 	<cfif IsUserInRole("student")>

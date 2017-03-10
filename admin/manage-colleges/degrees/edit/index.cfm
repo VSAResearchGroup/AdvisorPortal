@@ -4,7 +4,7 @@
 	<cflocation url="..">
 </cfif>
 
-<cfset messageBean=createObject('#this.mappings['cfcMapping']#.messageBean').init()>
+<cfset messageBean=createObject('cfcMapping.messageBean').init()>
 
 <!--- Do basic validation --->
 <cfif !IsDefined("url.college") || !IsDefined("url.degree") || !IsNumeric("#URLDecode(url.college)#") || !IsNumeric("#URLDecode(url.degree)#")>
