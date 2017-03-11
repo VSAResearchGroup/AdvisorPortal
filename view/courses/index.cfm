@@ -42,6 +42,15 @@
 	ORDER BY p.group_id, c.course_number
 </cfquery>
 
+<cfquery name="qViewGetCorequisites">
+	SELECT cr.id, cr.courses_id, cr.group_id, cr.courses_corequisite_id, c.course_number
+	FROM COREQUISITES cr
+	JOIN COURSES c
+	ON cr.courses_corequisite_id = c.id
+	WHERE cr.courses_id = <cfqueryparam value="#qViewGetCourse.id#" cfsqltype="cf_sql_integer">
+	ORDER BY cr.group_id, c.course_number
+</cfquery>
+
 <cfquery name="qViewGetPermission">
 	SELECT courses_id
 	FROM PREREQUISITE_PERMISSIONS
@@ -90,6 +99,38 @@
 	<cfif qViewGetPlacement.RecordCount>
 		<cfset ArrayAppend(aPrerequisites, "Placement into <cfoutput>#qViewGetCourse.course_number#</cfoutput> by assessment.")>
 	</cfif>
+</cfif>
+
+<!--- Build dynamic content for corequisites as strings to be displayed --->
+<cfset aCorequisites = arrayNew(1)>
+
+<!--- Format prerequisite class groups --->
+<cfif qViewGetCorequisites.RecordCount>
+	<cfset group=qViewGetCorequisites.group_id>
+	<cfset firstInGroup="true">
+	
+	<!--- Display individual course groups --->
+	<cfloop query="qViewGetCorequisites">
+		<cfif group EQ qViewGetCorequisites.group_id>
+			
+			<!--- add from the same group --->
+			<cfif firstInGroup EQ 'true'>
+				<cfset classes=qViewGetCorequisites.course_number>
+				<cfset firstInGroup="false">
+			<cfelse>
+				<cfset classes=classes & " and " & qViewGetCorequisites.course_number>
+			</cfif>
+		<cfelse>
+		
+			<!--- the group changed, so end the string --->
+			<cfset ArrayAppend(aCorequisites, classes)>
+			
+			<!--- begin the next string --->
+			<cfset group=qViewGetCorequisites.group_id>
+			<cfset classes=qViewGetCorequisites.course_number>
+		</cfif>	
+	</cfloop>
+	<cfset ArrayAppend(aCorequisites, classes)>
 </cfif>
 
 <!--- Load page --->
