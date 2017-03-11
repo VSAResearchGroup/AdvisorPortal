@@ -29,7 +29,7 @@
 <cfif isDefined("form.addDegreeButton")>
 	
 	<!--- Create, then add all admission and graduation courses to this plan --->
-	<cfstoredproc datasource="advisorPortal" procedure="createPLANS" returncode="true">
+	<cfstoredproc datasource="#GetApplicationMetaData().datasource#" procedure="createPLANS" returncode="true">
 		<cfprocparam value="#session.accountId#" cfsqltype="cf_sql_integer">
 		<cfprocparam value="#form.degreeId#" cfsqltype="cf_sql_integer">
 		<cfprocparam value="#form.collegeId#" cfsqltype="cf_sql_integer">

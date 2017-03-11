@@ -2,7 +2,7 @@
 <!--- Thomas Dye, August 2016 --->
 <cfcomponent>
 	<cfset this.name='AdvisorPortal'>
-	<cfset this.datasource='advisorPortal'>
+	<cfset this.datasource='AdvisorPortal'>
 	<cfset this.applicationTimeout=CreateTimeSpan(10, 0, 0, 0)>
 	<cfset this.sessionManagement=true>
 	<cfset this.sessionTimeout=CreateTimeSpan(0, 0, 30, 0)>
