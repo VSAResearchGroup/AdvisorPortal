@@ -18,28 +18,31 @@
 
 <cfset session.loginName="#qAccountGetAccount.first_name# #qAccountGetAccount.last_name#">
 
-<!--- Populate math and english placement data --->
-<cfquery name="qAccountGetPlacementCourses">
-	SELECT math_courses_id, english_courses_id
-	FROM STUDENT_PLACEMENTCOURSES
-	WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">
-</cfquery>
+<cfif IsUserInRole("student")>
+	
+	<!--- Populate math and english placement data --->
+	<cfquery name="qAccountGetPlacementCourses">
+		SELECT math_courses_id, english_courses_id
+		FROM STUDENT_PLACEMENTCOURSES
+		WHERE students_accounts_id = <cfqueryparam value="#session.accountId#" cfsqltype="cf_sql_integer">
+	</cfquery>
 
-<cfquery name="qAccountGetMathCourses">
-	SELECT id, course_number
-	FROM COURSES
-	WHERE use_catalog = 1
-	AND course_number LIKE 'MATH%'
-	ORDER BY course_number
-</cfquery>
-
-<cfquery name="qAccountGetEnglishCourses">
-	SELECT id, course_number
-	FROM COURSES
-	WHERE use_catalog = 1
-	AND course_number LIKE 'ENGL%'
-	ORDER BY course_number
-</cfquery>
+	<cfquery name="qAccountGetMathCourses">
+		SELECT id, course_number
+		FROM COURSES
+		WHERE use_catalog = 1
+		AND course_number LIKE 'MATH%'
+		ORDER BY course_number
+	</cfquery>
+	
+	<cfquery name="qAccountGetEnglishCourses">
+		SELECT id, course_number
+		FROM COURSES
+		WHERE use_catalog = 1
+		AND course_number LIKE 'ENGL%'
+		ORDER BY course_number
+	</cfquery>
+</cfif>
 
 <cfif isDefined("form.buttonUpdateEmail")>
 	
