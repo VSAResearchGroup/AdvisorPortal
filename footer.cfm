@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="footerblock block2">	
-				<p>Use of the Everett Community College logo and branding is for demonstration purposes only and this website not affiliated with Everett Community College in any way.</p>
+				<p>Use of the Everett Community College logo and branding is for demonstration purposes only and this website is not affiliated with Everett Community College in any way.</p>
 			</div>
 			
 			<div class="footerblock block3">
